@@ -1,5 +1,6 @@
 {% extends "./base.html" %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 
 {% block head %}
     {{ wizard.form.media }}
@@ -14,10 +15,10 @@
                 {% if wizard.form.forms %}
                     {{ wizard.form.management_form }}
                     {% for form in wizard.form.forms %}
-                        {{ form.as_table }}
+                        {{ form|crispy }}
                     {% endfor %}
                 {% else %}
-                    {{ wizard.form }}
+                    {{ wizard.form|crispy }}
                 {% endif %}
             </table>
             <div class="mt-3">

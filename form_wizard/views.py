@@ -14,7 +14,7 @@ class FormWizardView(SessionWizardView):
     def render_goto_step(self, goto_step, **kwargs):
         form1 = self.get_form(self.storage.current_step, data=self.request.POST,files=self.request.FILES)
         
-        if form1.is_valid():
+        if form1:
             self.storage.set_step_data(self.storage.current_step, self.process_step(form1))
             self.storage.set_step_files(self.storage.current_step, self.process_step_files(form1))
 
