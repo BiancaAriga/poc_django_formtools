@@ -20,11 +20,13 @@
                     {{ wizard.form }}
                 {% endif %}
             </table>
-            {% if wizard.steps.prev %}
-                <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% translate "first step" %}</button>
-                <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% translate "prev step" %}</button>
-            {% endif %}
-            <input type="submit" value="{% translate "submit" %}"/>
+            <div class="mt-3">
+                {% if wizard.steps.prev %}
+                    <button class="btn btn-primary rounded-5" name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}" formnovalidate>{% translate "first step" %}</button>
+                    <button class="btn btn-primary rounded-5" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" formnovalidate>{% translate "prev step" %}</button>
+                {% endif %}
+                <input class="btn btn-primary rounded-5" type="submit" value="{% translate "submit" %}"/>
+            </div>
         </form>
     </div>
     
