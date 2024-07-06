@@ -10,7 +10,18 @@ FORMS = [("step1", Step1Form),
 class FormWizardView(SessionWizardView):
     template_name = "app/form_wizard.html"
     form_list = FORMS
-    
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+        
+        step_count = len(self.form_list)
+        step_width = 100 / step_count if step_count > 0 else 100  
+        
+        context['step_count'] = step_count
+        context['step_width'] = step_width    
+        
+        return context
+
     def render_goto_step(self, goto_step, **kwargs):
         form1 = self.get_form(self.storage.current_step, data=self.request.POST,files=self.request.FILES)
         

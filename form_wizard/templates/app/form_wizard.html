@@ -7,7 +7,12 @@
 {% endblock %}
 
 {% block content %}
-    <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+    <p>Step {{ wizard.steps.step1 }} of {{ step_count }}</p>
+    <div class="d-flex justify-content-between gap-3 my-3">
+    {% for step in wizard.steps.all %}
+        <div class="wizard-step" style="height: 10px; width: {{ step_width }}%;"></div>
+    {% endfor %}
+    </div>
     <div id="form-container">
         <form action="" method="post" id="wizard-form">{% csrf_token %}
             <table>
@@ -30,5 +35,17 @@
             </div>
         </form>
     </div>
+    <script>
+        var step1Value = {{ wizard.steps.step1 }};
+        var steps = document.querySelectorAll('.wizard-step');
+        steps.forEach(function(step, index) {
+            step.classList.remove('bg-primary', 'bg-secondary', 'bg-success', 'bg-danger');
+            if (index + 1 <= step1Value) {
+                step.classList.add('bg-primary');
+            } else {
+                step.classList.add('bg-secondary');
+            }
+        });
+    </script>
     
 {% endblock %}
