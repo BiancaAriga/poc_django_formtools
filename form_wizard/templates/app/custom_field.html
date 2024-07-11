@@ -1,0 +1,10 @@
+{# templates/custom_field.html #}
+{% load crispy_forms_tags crispy_forms_field %}
+<div id="{{ field.id_for_label }}_container" class="{{ wrapper_class }}">
+    <label for="{{ field.id_for_label }}" class="{{ label_class }}">
+        <span class="px-2 fs-6 bg-white">{{ field.label }}</span>
+    </label>
+    <div class="controls {{ css_class }}">
+        {% crispy_field field %}
+    </div>
+</div>

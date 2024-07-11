@@ -7,19 +7,34 @@ FORMS = [("step1", Step1Form),
          ("step2", Step2Form),
          ("step3", Step3Form)]
 
+TEMPLATES = {"step1": "app/step1.html",
+             "step2": "app/step2.html",
+             "step3": "app/step3.html"}
+
+MESSAGES = {
+    "step1": "Informações pessoais",
+    "step2": "Contato",
+    "step3": "Endereço"
+}
 class FormWizardView(SessionWizardView):
     template_name = "app/form_wizard.html"
     form_list = FORMS
 
+
+    def get_template_names(self):
+        return ["app/form_wizard.html"]
+
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
-        
-        step_count = len(self.form_list)
-        step_width = 100 / step_count if step_count > 0 else 100  
-        
-        context['step_count'] = step_count
-        context['step_width'] = step_width    
-        
+        step_count = len(FORMS)
+        step_width = 100 / step_count if step_count > 0 else 100
+        current_step = self.steps.current
+        context.update({
+            'step_count': step_count,
+            'step_width': step_width,
+            'template_name': TEMPLATES[self.steps.current],
+            'step_message': MESSAGES[current_step]
+        })
         return context
 
     def render_goto_step(self, goto_step, **kwargs):
