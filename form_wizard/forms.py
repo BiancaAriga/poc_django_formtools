@@ -3,6 +3,9 @@ from .models import FormWizard
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 
+class Step0Form(forms.Form):
+    pass
+
 class Step1Form(forms.ModelForm):
     class Meta:
         model = FormWizard

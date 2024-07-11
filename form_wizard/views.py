@@ -1,21 +1,26 @@
 from django.shortcuts import render,redirect
 from formtools.wizard.views import SessionWizardView
-from .forms import Step1Form, Step2Form, Step3Form
+from .forms import Step0Form, Step1Form, Step2Form, Step3Form
 from .models import FormWizard
 
-FORMS = [("step1", Step1Form),
+FORMS = [("step0", Step0Form),
+         ("step1", Step1Form),
          ("step2", Step2Form),
          ("step3", Step3Form)]
 
-TEMPLATES = {"step1": "app/step1.html",
+TEMPLATES = {"step0": "app/step0.html",
+             "step1": "app/step1.html",
              "step2": "app/step2.html",
              "step3": "app/step3.html"}
 
 MESSAGES = {
+    "step0": "Bem-vindo ao Form Wizard",
     "step1": "Informações pessoais",
     "step2": "Contato",
     "step3": "Endereço"
 }
+#usar formset
+#estudar a wizard form
 class FormWizardView(SessionWizardView):
     template_name = "app/form_wizard.html"
     form_list = FORMS
@@ -61,15 +66,15 @@ class FormWizardView(SessionWizardView):
         form_data = [form.cleaned_data for form in form_list]
 
         form_data_model = FormWizard(
-            name=form_data[0]['name'],
-            full_name=form_data[0]['full_name'],
-            birth_date=form_data[0]['birth_date'],
-            phone=form_data[1]['phone'],
-            email=form_data[1]['email'],
-            address=form_data[2]['address'],
-            state=form_data[2]['state'],
-            city=form_data[2]['city'],
-            country=form_data[2]['country'],
+            name=form_data[1]['name'],
+            full_name=form_data[1]['full_name'],
+            birth_date=form_data[1]['birth_date'],
+            phone=form_data[2]['phone'],
+            email=form_data[2]['email'],
+            address=form_data[3]['address'],
+            state=form_data[3]['state'],
+            city=form_data[3]['city'],
+            country=form_data[3]['country'],
         )
         form_data_model.save()
 

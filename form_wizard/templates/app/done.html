@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Done</title>
-</head>
-<body>
-    <h1>Done</h1>
-    <p>Thank you for completing the wizard!</p>
-    <p>Form Data:</p>
+{% extends "./base.html" %}
+{% block content %}
+    <b>Form wizard concluído com sucesso!</b>
     <ul>
         {% for form in form_data %}
             <li>{{ form }}</li>
         {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock %}
