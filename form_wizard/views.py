@@ -1,12 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
-from .forms import Step0Form, Step1Form, Step2Form, Step3Form
-from .models import FormWizard
+from .forms import Step0Form, Step1Form, Step2Form, Step3FormSet
+from .models import FormWizard, Address
 
 FORMS = [("step0", Step0Form),
          ("step1", Step1Form),
          ("step2", Step2Form),
-         ("step3", Step3Form)]
+         ("step3", Step3FormSet)]
 
 TEMPLATES = {"step0": "app/step0.html",
              "step1": "app/step1.html",
@@ -64,6 +64,7 @@ class FormWizardView(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         form_data = [form.cleaned_data for form in form_list]
+        print(form_data)
 
         form_data_model = FormWizard(
             name=form_data[1]['name'],
@@ -71,12 +72,18 @@ class FormWizardView(SessionWizardView):
             birth_date=form_data[1]['birth_date'],
             phone=form_data[2]['phone'],
             email=form_data[2]['email'],
-            address=form_data[3]['address'],
-            state=form_data[3]['state'],
-            city=form_data[3]['city'],
-            country=form_data[3]['country'],
         )
         form_data_model.save()
+
+        for address_data in form_data[3]:
+            address_instance = Address(
+                address=address_data['address'],
+                state=address_data['state'],
+                city=address_data['city'],
+                country=address_data['country'],
+                form_wizard=form_data_model
+            )
+            address_instance.save()
 
         return render(self.request, 'app/done.html', {
             'form_data': form_data,

@@ -1,5 +1,6 @@
 from django import forms
-from .models import FormWizard
+from django.forms import formset_factory
+from .models import FormWizard, Address
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 
@@ -66,7 +67,7 @@ class Step2Form(forms.ModelForm):
 
 class Step3Form(forms.ModelForm):
     class Meta:
-        model = FormWizard
+        model = Address
         fields = ['address', 'state', 'city', 'country']
 
     def __init__(self, *args, **kwargs):
@@ -95,3 +96,8 @@ class Step3Form(forms.ModelForm):
                 wrapper_class='pattern-form-floating position-relative mb-4',
             ),
         )
+
+Step3FormSet = formset_factory(Step3Form, extra=2)
+
+for form in Step3FormSet():
+    print(form)
