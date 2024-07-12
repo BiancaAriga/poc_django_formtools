@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import formset_factory
+from django.forms import inlineformset_factory
 from .models import FormWizard, Address
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
@@ -65,6 +65,9 @@ class Step2Form(forms.ModelForm):
             ),
         )
 
+class Step3SelectionForm(forms.Form):
+    pass
+
 class Step3Form(forms.ModelForm):
     class Meta:
         model = Address
@@ -72,10 +75,15 @@ class Step3Form(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        for field_name in self.fields:
+            self.fields[field_name].required = True
+
         self.fields['address'].label = 'Endereço'
         self.fields['state'].label = 'Estado'
         self.fields['city'].label = 'Cidade'
         self.fields['country'].label = 'País'
+        
         self.helper = FormHelper()
         self.helper.label_class = "form-label position-absolute start-5 m-0 py-3 px-2"
         self.helper.layout = Layout(
@@ -97,7 +105,4 @@ class Step3Form(forms.ModelForm):
             ),
         )
 
-Step3FormSet = formset_factory(Step3Form, extra=2)
-
-for form in Step3FormSet():
-    print(form)
+Step3FormSet = inlineformset_factory(FormWizard, Address, form=Step3Form, can_delete=False)
