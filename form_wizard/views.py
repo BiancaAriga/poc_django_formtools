@@ -23,6 +23,8 @@ MESSAGES = {
     "step3_selection": "Endereços",
     "step3": "Endereço"
 }
+
+ADDRESS_COUNT = 3
 #usar formset
 #estudar a wizard form
 class FormWizardView(SessionWizardView):
@@ -44,14 +46,16 @@ class FormWizardView(SessionWizardView):
             'template_name': TEMPLATES[self.steps.current],
             'step_message': MESSAGES[current_step]
         })
-        
+        if current_step == 'step3_selection':
+            context['number_of_address'] = list(range(ADDRESS_COUNT))
+
         return context
     
     def get_form(self, step=None, data=None, files=None):
         form = super().get_form(step, data, files)
         
         if step == 'step3':
-            inlineformset_factory(FormWizard, Address, form=Step3Form, extra=3)
+            inlineformset_factory(FormWizard, Address, form=Step3Form, extra=ADDRESS_COUNT)
             #form = Step3FormSet(queryset=Address.objects.none())
             form.helper = Step3Form().helper
 
