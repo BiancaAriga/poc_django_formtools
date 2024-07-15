@@ -21,7 +21,7 @@ MESSAGES = {
     "step3": "Endereço"
 }
 
-ADDRESS_COUNT = 3
+ADDRESS_COUNT = 2
 
 class FormWizardView(SessionWizardView):
     template_name = "app/form_wizard.html"
@@ -51,8 +51,7 @@ class FormWizardView(SessionWizardView):
         form = super().get_form(step, data, files)
         
         if step == 'step3':
-            inlineformset_factory(FormWizard, Address, form=Step3Form, extra=ADDRESS_COUNT)
-            #form = Step3FormSet(queryset=Address.objects.none())
+            #inlineformset_factory(FormWizard, Address, form=Step3Form, extra=ADDRESS_COUNT)
             form.helper = Step3Form().helper
 
         return form

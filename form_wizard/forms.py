@@ -4,6 +4,7 @@ from .models import FormWizard, Address
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 
+
 class Step0Form(forms.Form):
     pass
 
@@ -102,4 +103,5 @@ class Step3Form(forms.ModelForm):
             ),
         )
 
-Step3FormSet = inlineformset_factory(FormWizard, Address, form=Step3Form, can_delete=False)
+Step3FormSet = inlineformset_factory(FormWizard, Address, form=Step3Form, can_delete=False, extra=2)
+
