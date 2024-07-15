@@ -74,15 +74,13 @@ class Step3Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for field_name in self.fields:
-            self.fields[field_name].required = True
-
         self.fields['address'].label = 'Endereço'
         self.fields['state'].label = 'Estado'
         self.fields['city'].label = 'Cidade'
         self.fields['country'].label = 'País'
         
         self.helper = FormHelper()
+        self.helper.form_tag = False
         self.helper.label_class = "form-label position-absolute start-5 m-0 py-3 px-2"
         self.helper.layout = Layout(
             Field('address', template='app/custom_field.html',
