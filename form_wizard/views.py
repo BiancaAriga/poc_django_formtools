@@ -45,21 +45,13 @@ class FormWizardView(SessionWizardView):
             context['number_of_address'] = list(range(ADDRESS_COUNT))
 
         return context
-    
-    def get_form(self, step=None, data=None, files=None):
-        if step == 'step3':
-            return Step3FormSet(data, files)
-        return super().get_form(step, data, files)
 
     def render_goto_step(self, goto_step, **kwargs):
         form1 = self.get_form(self.storage.current_step, data=self.request.POST, files=self.request.FILES)
-        print(self.request.POST)
-        print(form1)
-        if form1.is_valid():
+
+        if form1:
             self.storage.set_step_data(self.storage.current_step, self.process_step(form1))
             self.storage.set_step_files(self.storage.current_step, self.process_step_files(form1))
-        else:
-            print("Form1 errors:", form1.errors)
 
         self.storage.current_step = goto_step
 
@@ -68,21 +60,10 @@ class FormWizardView(SessionWizardView):
             files=self.storage.get_step_files(self.steps.current))
 
         return self.render(form, **kwargs)
-    
-    def render_next_step(self, form, **kwargs):
-        if form.errors:
-            print("Form errors:", form.errors)
-        return super().render_next_step(form, **kwargs)
 
     def done(self, form_list, **kwargs):
-        print('Entrou aqui em done')
-        
-        for form in form_list:
-            if form.errors:
-                print("Form errors:", form.errors)
         
         form_data = [form.cleaned_data for form in form_list]
-        print(form_data)
 
         form_data_model = FormWizard(
             name=form_data[1]['name'],
