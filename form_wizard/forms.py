@@ -65,9 +65,6 @@ class Step2Form(forms.ModelForm):
             ),
         )
 
-class Step3SelectionForm(forms.Form):
-    pass
-
 class Step3Form(forms.ModelForm):
     class Meta:
         model = Address

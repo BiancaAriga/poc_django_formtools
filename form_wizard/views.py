@@ -1,32 +1,28 @@
 from django.shortcuts import render
 from django.forms import inlineformset_factory
 from formtools.wizard.views import SessionWizardView
-from .forms import Step0Form, Step1Form, Step2Form, Step3SelectionForm, Step3FormSet, Step3Form
+from .forms import Step0Form, Step1Form, Step2Form, Step3FormSet, Step3Form
 from .models import FormWizard, Address
 
 FORMS = [("step0", Step0Form),
          ("step1", Step1Form),
          ("step2", Step2Form),
-         ("step3_selection", Step3SelectionForm),
          ("step3", Step3FormSet)]
 
 TEMPLATES = {"step0": "app/step0.html",
              "step1": "app/step1.html",
              "step2": "app/step2.html",
-             "step3_selection": "app/step3_selection.html",
              "step3": "app/step3.html"}
 
 MESSAGES = {
     "step0": "Bem-vindo ao Form Wizard",
     "step1": "Informações pessoais",
     "step2": "Contato",
-    "step3_selection": "Endereços",
     "step3": "Endereço"
 }
 
 ADDRESS_COUNT = 3
-#usar formset
-#estudar a wizard form
+
 class FormWizardView(SessionWizardView):
     template_name = "app/form_wizard.html"
     form_list = FORMS
@@ -46,7 +42,7 @@ class FormWizardView(SessionWizardView):
             'template_name': TEMPLATES[self.steps.current],
             'step_message': MESSAGES[current_step]
         })
-        if current_step == 'step3_selection':
+        if current_step == 'step3':
             context['number_of_address'] = list(range(ADDRESS_COUNT))
 
         return context
@@ -97,7 +93,7 @@ class FormWizardView(SessionWizardView):
         )
         form_data_model.save()
 
-        for address_data in form_data[4]:
+        for address_data in form_data[3]:
             address_instance = Address(
                 address=address_data['address'],
                 state=address_data['state'],
