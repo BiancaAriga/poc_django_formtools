@@ -1,7 +1,6 @@
 from django.shortcuts import render
-from django.forms import inlineformset_factory
 from formtools.wizard.views import SessionWizardView
-from .forms import Step0Form, Step1Form, Step2Form, Step3FormSet, Step3Form
+from .forms import Step0Form, Step1Form, Step2Form, Step3FormSet
 from .models import FormWizard, Address
 
 FORMS = [("step0", Step0Form),
@@ -48,21 +47,19 @@ class FormWizardView(SessionWizardView):
         return context
     
     def get_form(self, step=None, data=None, files=None):
-        form = super().get_form(step, data, files)
-        
         if step == 'step3':
-            #inlineformset_factory(FormWizard, Address, form=Step3Form, extra=ADDRESS_COUNT)
-            form.helper = Step3Form().helper
-
-        return form
-
+            return Step3FormSet(data, files)
+        return super().get_form(step, data, files)
 
     def render_goto_step(self, goto_step, **kwargs):
-        form1 = self.get_form(self.storage.current_step, data=self.request.POST,files=self.request.FILES)
-        
-        if form1:
+        form1 = self.get_form(self.storage.current_step, data=self.request.POST, files=self.request.FILES)
+        print(self.request.POST)
+        print(form1)
+        if form1.is_valid():
             self.storage.set_step_data(self.storage.current_step, self.process_step(form1))
             self.storage.set_step_files(self.storage.current_step, self.process_step_files(form1))
+        else:
+            print("Form1 errors:", form1.errors)
 
         self.storage.current_step = goto_step
 
@@ -72,14 +69,18 @@ class FormWizardView(SessionWizardView):
 
         return self.render(form, **kwargs)
     
-    
     def render_next_step(self, form, **kwargs):
-      #  print(self.storage.get_step_data(self.steps.next))
+        if form.errors:
+            print("Form errors:", form.errors)
         return super().render_next_step(form, **kwargs)
 
-
     def done(self, form_list, **kwargs):
-        print('entrou aqui em done')
+        print('Entrou aqui em done')
+        
+        for form in form_list:
+            if form.errors:
+                print("Form errors:", form.errors)
+        
         form_data = [form.cleaned_data for form in form_list]
         print(form_data)
 

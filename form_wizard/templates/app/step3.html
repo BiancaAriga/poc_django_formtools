@@ -1,24 +1,25 @@
 {% load crispy_forms_tags %}
-{{ wizard.management_form }}
+<table>
+    {% for form in wizard.form.forms %}
+        <button type="button" class="btn btn-outline-secondary w-100 px-3 py-4 mb-3 rounded-3"
+                data-bs-toggle="modal" data-bs-target="#modal-{{ forloop.counter }}">
+            Endereço {{ forloop.counter }}
+        </button>
 
-{% for form in wizard.form.forms %}
-    <button type="button" class="btn btn-outline-secondary w-100 px-3 py-4 mb-3 rounded-3"
-            data-bs-toggle="modal" data-bs-target="#modal-{{ forloop.counter }}">
-        Endereço {{ forloop.counter }}
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modal-{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalLabel-{{ forloop.counter }}" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalLabel-{{ forloop.counter }}">Endereço {{ forloop.counter }}</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    {% crispy form %}
+        <!-- Modal -->
+        <div class="modal fade" id="modal-{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalLabel-{{ forloop.counter }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalLabel-{{ forloop.counter }}">Endereço {{ forloop.counter }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ wizard.form.management_form }}
+                        {% crispy form %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
+</table>
