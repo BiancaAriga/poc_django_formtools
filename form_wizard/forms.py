@@ -23,6 +23,7 @@ class Step1Form(forms.ModelForm):
         self.fields['name'].label = 'Nome'
         self.fields['full_name'].label = 'Nome Completo'
         self.helper = FormHelper()
+        self.helper.form_tag = False
         self.helper.label_class = "form-label position-absolute start-5 m-0 py-3 px-2"
         self.helper.layout = Layout(
             Field(
@@ -54,6 +55,7 @@ class Step2Form(forms.ModelForm):
         self.fields['phone'].label = 'Celular'
         self.fields['email'].label = 'Email'
         self.helper = FormHelper()
+        self.helper.form_tag = False
         self.helper.label_class = "form-label position-absolute start-5 m-0 py-3 px-2"
         self.helper.layout = Layout(
             Field('phone', template='app/custom_field.html',
