@@ -3,9 +3,10 @@
     {{ wizard.management_form }}
     {{ wizard.form.management_form }}
     {% for form in wizard.form.forms %}
-        <button type="button" class="btn btn-outline-secondary w-100 px-3 py-4 mb-3 rounded-3"
+        <button type="button" class="btn btn-outline-secondary w-100 p-3 mb-3 rounded-3"
                 data-bs-toggle="modal" data-bs-target="#modal-{{ forloop.counter }}">
             Endereço {{ forloop.counter }}
+            <span class="d-flex flex-column change-span-{{ forloop.counter0 }}">Adicione informações do endereço</span>
         </button>
 
         <!-- Modal -->
@@ -24,3 +25,30 @@
         </div>
     {% endfor %}
 </table>
+
+<script>
+    const inputElements = document.querySelectorAll('textarea.address');
+
+    function handleInputChange(event) {
+        const inputValue = event.target.value;
+
+        const idParts = event.target.id.split('-');
+        const number = idParts[1];
+
+        const spanElement = document.querySelector(`.change-span-${number}`);
+        if (spanElement) {
+            spanElement.textContent = inputValue;
+        }
+    }
+
+    inputElements.forEach(inputElement => {
+        inputElement.addEventListener('input', handleInputChange);
+        if (inputElement.value) {
+            const event = new Event('input', {
+                bubbles: true,
+                cancelable: true,
+            });
+            inputElement.dispatchEvent(event);
+        }
+    });
+</script>

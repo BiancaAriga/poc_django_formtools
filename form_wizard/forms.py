@@ -84,7 +84,7 @@ class Step3Form(forms.ModelForm):
         self.helper.label_class = "form-label position-absolute start-5 m-0 py-3 px-2"
         self.helper.layout = Layout(
             Field('address', template='app/custom_field.html',
-                css_class='form-control rounded-3 p-3', 
+                css_class='form-control rounded-3 p-3 address', 
                 wrapper_class='pattern-form-floating position-relative mb-4',
             ),
             Field('state', template='app/custom_field.html',
