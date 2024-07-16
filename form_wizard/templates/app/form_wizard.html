@@ -8,7 +8,7 @@
 
 {% block content %}
     <div id="form-container">
-        <form action="" method="post" id="wizard-form" class="pattern-form">
+        <form action="" method="post" id="mobile-wizard-form" class="pattern-form">
             {% csrf_token %}
             <div id="mobile-steps">
                 <h3>Formulário mob</h3>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </form>
-        <form action="" method="post" id="wizard-form" class="pattern-form">
+        <form action="" method="post" id="desktop-wizard-form" class="pattern-form">
             {% csrf_token %}
             <div id="desktop-steps" style="display:none;">
                 <h3>Formulário Desk</h3>

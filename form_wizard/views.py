@@ -25,6 +25,7 @@ ADDRESS_COUNT = 2
 class FormWizardView(SessionWizardView):
     template_name = "app/form_wizard.html"
     form_list = FORMS
+    _add_desktop_to_prefix = False
 
     def get_template_names(self):
         return ["app/form_wizard.html"]
@@ -35,6 +36,7 @@ class FormWizardView(SessionWizardView):
         step_width = 100 / step_count if step_count > 0 else 100
         current_step = self.steps.current
 
+        self._add_desktop_to_prefix = True
         context.update({
             'step_count': step_count,
             'step_width': step_width,
@@ -43,10 +45,17 @@ class FormWizardView(SessionWizardView):
             'template_names': [TEMPLATES[step] for step in self.steps.all],
             'all_forms': [self.get_form(step) for step in self.form_list]
         })
+        self._add_desktop_to_prefix = False
         if current_step == 'step3':
             context['number_of_address'] = list(range(ADDRESS_COUNT))
 
         return context
+
+    def get_form_prefix(self, step=None, form=None):
+        if self._add_desktop_to_prefix:
+            return 'desktop_' + super().get_form_prefix(step, form)
+        else:
+            return super().get_form_prefix(step, form)
 
     def render_goto_step(self, goto_step, **kwargs):
         form1 = self.get_form(self.storage.current_step, data=self.request.POST, files=self.request.FILES)
@@ -65,20 +74,30 @@ class FormWizardView(SessionWizardView):
         return self.render(form, **kwargs)
     
     def post(self, *args, **kwargs):
+        print(self.request.POST)
         form_wizard_override = self.request.POST.get('wizard-desktop-override', None)
         if form_wizard_override:
+            self._add_desktop_to_prefix = True
             self.storage.current_step = self.steps.last
             invalid = False
             for step in self.form_list:
                 form = self.get_form(step, data=self.request.POST, files=self.request.FILES)
+                print(form)
                 if not form.is_valid():
+                    print(f'{step} invalid:', form.errors)
                     invalid = True
                 else:
+                    print(f'{step} valid:', form.cleaned_data)
                     self.storage.set_step_data(step, self.process_step(form))
                     self.storage.set_step_files(step, self.process_step_files(form))
             if invalid:
-                return self.render(form)
-            return self.render_done(form, **kwargs)
+                print('invalid desktop form')
+                next_render = self.render(form)
+            print("calling done!")
+            next_render = self.render_done(form, **kwargs)
+            self._add_desktop_to_prefix = False
+            return next_render
+
 
         return super().post(*args, **kwargs)
 
