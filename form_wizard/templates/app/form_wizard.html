@@ -10,7 +10,7 @@
     <div id="form-container">
         <form action="" method="post" id="mobile-wizard-form" class="pattern-form">
             {% csrf_token %}
-            <div id="mobile-steps">
+            <div id="mobile-steps" style="display:none;">
                 <h3>Formulário mob</h3>
                 {% if wizard.steps.prev %}
                     <button class="btn btn-light rounded-5" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" formnovalidate>
@@ -43,9 +43,14 @@
                 <h3>Formulário Desk</h3>
                 {{ wizard.management_form }}
                 {% for form in all_forms %}
-                        <table>
-                            {{form|crispy }}
-                        </table>
+                    {% if form.forms %}
+                    {{ form.management_form }}
+                        {% for formset in form.forms %}
+                            {% crispy formset %}
+                        {% endfor %}
+                    {% else %}
+                        {% crispy form %}
+                    {% endif %}
                 {% endfor %}
                 <input type="hidden" name="wizard-desktop-override" id="wizard-desktop-override" value="1">
                 <div class="mt-3 d-flex flex-row-reverse">
