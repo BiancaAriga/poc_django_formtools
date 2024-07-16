@@ -40,9 +40,10 @@
                 <h3>Formulário Desk</h3>
                 {% for form in all_forms %}
                         <table>
-                            {{form|crispy }} 
+                            {{form|crispy }}
                         </table>
                 {% endfor %}
+                <input type="hidden" name="wizard-desktop-override" id="wizard-desktop-override" value="1">
                 <div class="mt-3 d-flex flex-row-reverse">
                     <input class="btn btn-primary rounded-5 fw-semibold py-2 px-3" type="submit" value="Concluir"/>
                 </div>

@@ -65,7 +65,21 @@ class FormWizardView(SessionWizardView):
         return self.render(form, **kwargs)
     
     def post(self, *args, **kwargs):
-        print(self.request.POST)
+        form_wizard_override = self.request.POST.get('wizard-desktop-override', None)
+        if form_wizard_override:
+            self.storage.current_step = self.steps.last
+            invalid = False
+            for step in self.form_list:
+                form = self.get_form(step, data=self.request.POST, files=self.request.FILES)
+                if not form.is_valid():
+                    invalid = True
+                else:
+                    self.storage.set_step_data(step, self.process_step(form))
+                    self.storage.set_step_files(step, self.process_step_files(form))
+            if invalid:
+                return self.render(form)
+            return self.render_done(form, **kwargs)
+
         return super().post(*args, **kwargs)
 
     def done(self, form_list, **kwargs):
