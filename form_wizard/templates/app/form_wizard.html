@@ -36,8 +36,12 @@
                     <input class="btn btn-primary rounded-5 fw-semibold py-2 px-3" type="submit" value="Próximo"/>
                 </div>
             </div>
+        </form>
+        <form action="" method="post" id="wizard-form" class="pattern-form">
+            {% csrf_token %}
             <div id="desktop-steps" style="display:none;">
                 <h3>Formulário Desk</h3>
+                {{ wizard.management_form }}
                 {% for form in all_forms %}
                         <table>
                             {{form|crispy }}
