@@ -39,7 +39,9 @@ class FormWizardView(SessionWizardView):
             'step_count': step_count,
             'step_width': step_width,
             'template_name': TEMPLATES[self.steps.current],
-            'step_message': MESSAGES[current_step]
+            'step_message': MESSAGES[current_step],
+            'template_names': [TEMPLATES[step] for step in self.steps.all],
+            'all_forms': [self.get_form(step) for step in self.form_list]
         })
         if current_step == 'step3':
             context['number_of_address'] = list(range(ADDRESS_COUNT))
@@ -48,6 +50,7 @@ class FormWizardView(SessionWizardView):
 
     def render_goto_step(self, goto_step, **kwargs):
         form1 = self.get_form(self.storage.current_step, data=self.request.POST, files=self.request.FILES)
+        print(form1)
 
         if form1:
             self.storage.set_step_data(self.storage.current_step, self.process_step(form1))
@@ -60,9 +63,13 @@ class FormWizardView(SessionWizardView):
             files=self.storage.get_step_files(self.steps.current))
 
         return self.render(form, **kwargs)
+    
+    def post(self, *args, **kwargs):
+        print(self.request.POST)
+        return super().post(*args, **kwargs)
 
     def done(self, form_list, **kwargs):
-        
+        print('passou em done')
         form_data = [form.cleaned_data for form in form_list]
 
         form_data_model = FormWizard(
