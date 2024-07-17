@@ -1,0 +1,21 @@
+{% load crispy_forms_tags %}
+<button type="button" class="btn btn-outline-secondary w-100 p-3 mb-3 rounded-3"
+        data-bs-toggle="modal" data-bs-target="#modal-formset-{{ forloop.counter }}-{{device}}">
+    Endereço {{ forloop.counter }}
+    <span class="d-flex flex-column change-span-{{ forloop.counter0 }}">Adicione informações do endereço</span>
+</button>
+
+<!-- Modal para o formulário do formset -->
+<div class="modal fade" id="modal-formset-{{ forloop.counter }}-{{device}}" tabindex="-1" aria-labelledby="modalLabel-formset-{{ forloop.counter }}-{{device}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalLabel-formset-{{ forloop.counter }}-{{device}}">Endereço {{ forloop.counter }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% crispy formset %}
+            </div>
+        </div>
+    </div>
+</div>

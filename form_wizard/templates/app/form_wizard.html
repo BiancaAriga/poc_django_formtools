@@ -44,14 +44,15 @@
                 {{ wizard.management_form }}
                 {% for form in all_forms %}
                     {% if form.forms %}
-                    {{ form.management_form }}
+                        {{ form.management_form }}
                         {% for formset in form.forms %}
-                            {% crispy formset %}
+                            {% include "./form_modal.html" with device=desktop %}
                         {% endfor %}
                     {% else %}
                         {% crispy form %}
                     {% endif %}
                 {% endfor %}
+
                 <input type="hidden" name="wizard-desktop-override" id="wizard-desktop-override" value="1">
                 <div class="mt-3 d-flex flex-row-reverse">
                     <input class="btn btn-primary rounded-5 fw-semibold py-2 px-3" type="submit" value="Concluir"/>
@@ -75,5 +76,31 @@
 
         window.addEventListener('load', checkScreenWidth);
         window.addEventListener('resize', checkScreenWidth);
+
+
+        const inputElements = document.querySelectorAll('textarea.address');
+
+        function handleInputChange(event) {
+            const inputValue = event.target.value;
+
+            const idParts = event.target.id.split('-');
+            const number = idParts[1];
+
+            const spanElement = document.querySelector(`.change-span-${number}`);
+            if (spanElement) {
+                spanElement.textContent = inputValue;
+            }
+        }
+
+        inputElements.forEach(inputElement => {
+            inputElement.addEventListener('input', handleInputChange);
+            if (inputElement.value) {
+                const event = new Event('input', {
+                    bubbles: true,
+                    cancelable: true,
+                });
+                inputElement.dispatchEvent(event);
+            }
+        });
     </script>
 {% endblock %}
